@@ -33,7 +33,10 @@ function addRandomGreeting() {
 function loadData() {
   const commentsContainer = document.getElementById('comments-container');
   commentsContainer.innerText = 'Loading comments...';
-  fetch('/data').then((response) => response.text()).then((mytext) => {
-    commentsContainer.innerText = mytext;
+  fetch('/data').then((response) => response.json()).then((commentsArr) => {
+    commentsContainer.innerText = '';
+    commentsArr.forEach((val) => {
+      commentsContainer.innerText += val + '\n';
+    });
   });
 }
