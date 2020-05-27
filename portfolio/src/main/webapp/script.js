@@ -36,7 +36,7 @@ function loadData() {
     commentsArr.forEach((val) => {
       const commentDiv = document.createElement('div');
       commentDiv.className = 'comment-row';
-      commentDiv.innerText = val + '\n';
+      commentDiv.innerText = val;
       commentsContainer.appendChild(commentDiv);
     });
   });
