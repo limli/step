@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Servlet that returns some example content. TODO: modify this file to handle
- * comments data
+ * Servlet that returns some example content. TODO: save comments to datastore
  */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
