@@ -23,19 +23,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.ArrayList;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/**
+ * Servlet that returns some example content. TODO: modify this file to handle
+ * comments data
+ */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-    private List<String> list;
-
-    @Override
-    public void init() {
-        list = new ArrayList<>();
-        list.add("welcome world");
-        list.add("hello world");
-        list.add("bye world");
-    }
+    private List<String> list = new ArrayList<>();;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,5 +38,12 @@ public class DataServlet extends HttpServlet {
         String json = gson.toJson(list);
         response.setContentType("application/json;");
         response.getWriter().println(json);
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String comment = request.getParameter("comment");
+        list.add(comment);
+        response.sendRedirect("/index.html");
     }
 }

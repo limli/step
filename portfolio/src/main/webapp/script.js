@@ -31,12 +31,13 @@ function addRandomGreeting() {
  * Adds the comments to the page
  */
 function loadData() {
-  const commentsContainer = document.getElementById('comments-container');
-  commentsContainer.innerText = 'Loading comments...';
   fetch('/data').then((response) => response.json()).then((commentsArr) => {
-    commentsContainer.innerText = '';
+    const commentsContainer = document.getElementById('comments-container');
     commentsArr.forEach((val) => {
-      commentsContainer.innerText += val + '\n';
+      const commentDiv = document.createElement('div');
+      commentDiv.className = 'comment-row';
+      commentDiv.innerText = val + '\n';
+      commentsContainer.appendChild(commentDiv);
     });
   });
 }
