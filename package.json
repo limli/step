@@ -1,0 +1,27 @@
+{
+  "name": "step",
+  "version": "1.0.0",
+  "description": "This repo contains limli's portfolio and STEP projects.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limli/step.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/limli/step/issues"
+  },
+  "homepage": "https://github.com/limli/step#readme",
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
