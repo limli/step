@@ -33,11 +33,34 @@ function addRandomGreeting() {
 function loadData() {
   fetch('/data').then((response) => response.json()).then((commentsArr) => {
     const commentsContainer = document.getElementById('comments-container');
+    commentsContainer.innerHTML = '';
     commentsArr.forEach((comment) => {
       const commentDiv = document.createElement('div');
       commentDiv.className = 'comment-row';
-      commentDiv.innerText = comment.comment;
+
+      const textDiv = document.createElement('div');
+      textDiv.innerHTML = comment.comment;
+
+      const btnDiv = document.createElement('div');
+      btnDiv.className = 'alignright';
+      const btn = document.createElement('button');
+      btn.onclick = () => deleteComment(comment.id);
+      btn.innerText = 'Delete';
+      btnDiv.appendChild(btn);
+
+      commentDiv.appendChild(textDiv);
+      commentDiv.appendChild(btnDiv);
       commentsContainer.appendChild(commentDiv);
     });
   });
+}
+
+/**
+ * Deletes the comment with given id
+ * @param {*} id
+ */
+function deleteComment(id) {
+  const params = new URLSearchParams();
+  params.append('id', id);
+  fetch('/delete-data', {method: 'POST', body: params}).then(loadData);
 }
