@@ -7,3 +7,20 @@
 #greeting-container {
   margin-top: 20px;
 }
+
+.comment-row:nth-child(odd) {
+  background-color: #DDDDDD;
+}
+
+.comment-row {
+  padding: 5px;
+}
+
+#comments-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-textarea {
+  width: 100%;
+}

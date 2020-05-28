@@ -14,19 +14,36 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+// TODO(limli): save comments to datastore
+/** Servlet that returns some example content. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private List<String> list = new ArrayList<>();
+
+  /** GET the comments as a json array. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("Hello limli");
+    Gson gson = new Gson();
+    String json = gson.toJson(list);
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
+  }
+
+  /** POST a new comment and redirects to /index.html. */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String comment = request.getParameter("comment");
+    list.add(comment);
+    response.sendRedirect("/index.html");
   }
 }

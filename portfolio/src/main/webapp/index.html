@@ -18,7 +18,18 @@
       <p>Click the button below to get a random message:</p>
       <button onclick="addRandomGreeting()">Hello</button>
       <div id="greeting-container"></div>
-      <div id="comments-container"></div>
+      <div>
+        <h3>Comments</h3>
+        <div id="comments-container"></div>
+      </div>
+      <div>
+        <h3>Leave a Comment</h3>
+        <form action="/data" method="POST">
+          <textarea class="comment-textarea" name="comment" placeholder="Your Comment..."></textarea>
+          <br>
+          <input type="submit" value="Add a Comment"/>
+        </form>
+      </div>
     </div>
   </body>
 </html>
