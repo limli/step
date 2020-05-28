@@ -33,10 +33,10 @@ function addRandomGreeting() {
 function loadData() {
   fetch('/data').then((response) => response.json()).then((commentsArr) => {
     const commentsContainer = document.getElementById('comments-container');
-    commentsArr.forEach((val) => {
+    commentsArr.forEach((comment) => {
       const commentDiv = document.createElement('div');
       commentDiv.className = 'comment-row';
-      commentDiv.innerText = val;
+      commentDiv.innerText = comment.comment;
       commentsContainer.appendChild(commentDiv);
     });
   });
