@@ -44,7 +44,10 @@ function loadData() {
       const btnDiv = document.createElement('div');
       btnDiv.className = 'alignright';
       const btn = document.createElement('button');
-      btn.onclick = () => deleteComment(comment.id);
+      btn.onclick = () => {
+        commentDiv.remove();
+        deleteComment(comment.id);
+      };
       btn.innerText = 'Delete';
       btnDiv.appendChild(btn);
 
