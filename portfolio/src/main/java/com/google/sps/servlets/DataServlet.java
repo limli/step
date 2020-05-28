@@ -34,12 +34,17 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private final DatastoreService datastore;
+
+  public DataServlet() {
+    datastore = DatastoreServiceFactory.getDatastoreService();
+  }
+
   /** GET the comments as a json array. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<Comment> list = new ArrayList<>();
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
@@ -66,7 +71,6 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty("comment", comment);
     commentEntity.setProperty("timestamp", System.currentTimeMillis());
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
     response.sendRedirect("/index.html");
