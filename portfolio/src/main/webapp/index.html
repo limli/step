@@ -7,6 +7,46 @@
     <script src="script.js"></script>
   </head>
   <body onload="loadData()">
+    <div class="content">
+      <div class="header">
+        <h2>Lim Li's Portfolio</h2>
+      </div>
+
+      <div class="row">
+        <div class="leftcolumn">
+          <div class="card">
+            <h2>About Me</h2>
+            <p>
+              I am a year 2 NUS student studying Computer Science and Applied Math.
+            </p>
+            <p>
+              I like playing puzzle games, and my favourite is Stephen's Sausage Roll, because the game is very <i>elegant</i>.
+            </p>
+            <p><img src="/images/ssr.jpg" width="300em"></p>
+          </div>
+        </div>
+
+        <div class="rightcolumn">
+          <div class="card">
+            <h2>Comments</h2>
+            <div id="comments-container"></div>
+            <h3>Leave a Comment</h3>
+            <form action="/data" method="POST">
+              <textarea class="comment-textarea" name="comment" placeholder="Your Comment..."></textarea>
+              <br>
+              <input type="submit" value="Add a Comment"/>
+            </form>
+          </div>
+          
+          <div class="card">
+            <p><a href="https://github.com/limli/">My Github</a></p>
+            <p><a href="https://www.linkedin.com/in/lim-li-399847192">My Linkedin</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--
     <div id="content">
       <h1>My Portfolio</h1>
       <p>This is limli's portfolio.</p>
@@ -30,6 +70,6 @@
           <input type="submit" value="Add a Comment"/>
         </form>
       </div>
-    </div>
+    </div>-->
   </body>
 </html>
