@@ -41,18 +41,18 @@ function loadData() {
       const textDiv = document.createElement('div');
       textDiv.innerHTML = comment.comment;
 
-      const btnDiv = document.createElement('div');
-      btnDiv.className = 'alignright';
-      const btn = document.createElement('button');
-      btn.onclick = () => {
+      const deleteBtnDiv = document.createElement('div');
+      deleteBtnDiv.className = 'alignright';
+      const deleteBtn = document.createElement('button');
+      deleteBtn.onclick = () => {
         commentDiv.remove();
         deleteComment(comment.id);
       };
-      btn.innerText = 'Delete';
-      btnDiv.appendChild(btn);
+      deleteBtn.innerText = 'Delete';
+      deleteBtnDiv.appendChild(deleteBtn);
 
       commentDiv.appendChild(textDiv);
-      commentDiv.appendChild(btnDiv);
+      commentDiv.appendChild(deleteBtnDiv);
       commentsContainer.appendChild(commentDiv);
     });
   });
