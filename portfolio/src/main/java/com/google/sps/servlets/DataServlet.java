@@ -14,17 +14,22 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.QueryResultList;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +41,8 @@ public class DataServlet extends HttpServlet {
 
   private final DatastoreService datastore;
 
+  static final int PAGE_SIZE = 5;
+
   public DataServlet() {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
@@ -45,9 +52,25 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     List<Comment> list = new ArrayList<>();
 
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
-    PreparedQuery results = datastore.prepare(query);
-    for (Entity entity : results.asIterable()) {
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery pq = datastore.prepare(query);
+
+    FetchOptions fetchOptions = FetchOptions.Builder.withLimit(PAGE_SIZE);
+    String startCursor = request.getParameter("cursor");
+    if (startCursor != null) {
+      fetchOptions.startCursor(Cursor.fromWebSafeString(startCursor));
+    }
+
+    QueryResultList<Entity> results;
+    try {
+      results = pq.asQueryResultList(fetchOptions);
+    } catch (IllegalArgumentException e) {
+      // invalid cursor used
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+    }
+
+    for (Entity entity : results) {
       long id = entity.getKey().getId();
       String str = (String) entity.getProperty("comment");
       long timestamp = (long) entity.getProperty("timestamp");
@@ -56,8 +79,13 @@ public class DataServlet extends HttpServlet {
       list.add(comment);
     }
 
+    String cursorString = results.getCursor().toWebSafeString();
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("comments", list);
+    map.put("cursor", cursorString);
     Gson gson = new Gson();
-    String json = gson.toJson(list);
+    String json = gson.toJson(map);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
