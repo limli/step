@@ -24,3 +24,8 @@
 .comment-textarea {
   width: 100%;
 }
+
+.alignright {
+  display: flex;
+  justify-content: flex-end;
+}
