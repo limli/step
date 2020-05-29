@@ -39,7 +39,7 @@ function loadData() {
       commentDiv.className = 'comment-row';
 
       const textDiv = document.createElement('div');
-      textDiv.innerHTML = comment.comment;
+      textDiv.innerText = comment.comment;
 
       const deleteBtnDiv = document.createElement('div');
       deleteBtnDiv.className = 'alignright';
