@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that handles deleting comments. */
-@WebServlet("/delete-data")
+@WebServlet("/comments/*")
 public class DeleteServlet extends HttpServlet {
 
   private final DatastoreService datastore;
@@ -22,8 +22,9 @@ public class DeleteServlet extends HttpServlet {
 
   /** Deletes the comment with the given id parameter */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long id = Long.parseLong(request.getParameter("id"));
+  public void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+    long id = Long.parseLong(request.getPathInfo().substring(1));
 
     Key taskEntityKey = KeyFactory.createKey("Comment", id);
     datastore.delete(taskEntityKey);
