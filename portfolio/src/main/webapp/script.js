@@ -36,12 +36,12 @@ function loadData() {
 
 /**
  * Loads more comments and adds it to the page
- * @param {string} cursor
+ * @param {string} paginationToken
  */
-function loadMoreData(cursor = null) {
+function loadMoreData(paginationToken = null) {
   let url='/data';
-  if (cursor) {
-    url += '?cursor=' + cursor;
+  if (paginationToken) {
+    url += '?paginationToken=' + paginationToken;
   }
   fetch(url).then((response) => response.json()).then((obj) => {
     const commentsArr = obj.comments;
@@ -70,11 +70,11 @@ function loadMoreData(cursor = null) {
     });
 
     if (commentsArr.length > 0) {
-      const cursor = obj.cursor;
+      const paginationToken = obj.paginationToken;
       const loadMoreBtn = document.createElement('button');
       loadMoreBtn.onclick = () => {
         loadMoreBtn.remove();
-        loadMoreData(cursor);
+        loadMoreData(paginationToken);
       };
       loadMoreBtn.innerText = 'Load More...';
       commentsContainer.appendChild(loadMoreBtn);

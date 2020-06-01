@@ -55,9 +55,9 @@ public class DataServlet extends HttpServlet {
     PreparedQuery pq = datastore.prepare(query);
 
     FetchOptions fetchOptions = FetchOptions.Builder.withLimit(PAGE_SIZE);
-    String startCursor = request.getParameter("cursor");
-    if (startCursor != null) {
-      fetchOptions.startCursor(Cursor.fromWebSafeString(startCursor));
+    String paginationToken = request.getParameter("paginationToken");
+    if (paginationToken != null) {
+      fetchOptions.startCursor(Cursor.fromWebSafeString(paginationToken));
     }
 
     QueryResultList<Entity> results;
@@ -79,11 +79,11 @@ public class DataServlet extends HttpServlet {
       list.add(comment);
     }
 
-    String cursorString = results.getCursor().toWebSafeString();
+    String newPaginationToken = results.getCursor().toWebSafeString();
 
     Map<String, Object> map = new HashMap<>();
     map.put("comments", list);
-    map.put("cursor", cursorString);
+    map.put("paginationToken", newPaginationToken);
     Gson gson = new Gson();
     String json = gson.toJson(map);
     response.setContentType("application/json;");
