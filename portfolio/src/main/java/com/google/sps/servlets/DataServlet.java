@@ -23,6 +23,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -39,12 +41,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
+  private UserService userService;
   private final DatastoreService datastore;
 
   static final int PAGE_SIZE = 5;
 
   public DataServlet() {
     datastore = DatastoreServiceFactory.getDatastoreService();
+    userService = UserServiceFactory.getUserService();
   }
 
   /** GET the comments as a json array. */
@@ -73,9 +77,10 @@ public class DataServlet extends HttpServlet {
     for (Entity entity : results) {
       long id = entity.getKey().getId();
       String str = (String) entity.getProperty("comment");
+      String email = (String) entity.getProperty("email");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, str, timestamp);
+      Comment comment = new Comment(id, email, str, timestamp);
       list.add(comment);
     }
 
@@ -93,9 +98,15 @@ public class DataServlet extends HttpServlet {
   /** POST a new comment and redirects to /index.html. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    if (!userService.isUserLoggedIn()) {
+      response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      return;
+    }
     String comment = request.getParameter("comment");
+    String email = userService.getCurrentUser().getEmail();
 
     Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("email", email);
     commentEntity.setProperty("comment", comment);
     commentEntity.setProperty("timestamp", System.currentTimeMillis());
 
