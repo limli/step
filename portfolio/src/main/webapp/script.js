@@ -28,12 +28,25 @@ function addRandomGreeting() {
 }
 
 /**
- * Adds the comments to the page
+ * Adds the first batch of comments to the page
  */
 function loadData() {
-  fetch('/data').then((response) => response.json()).then((commentsArr) => {
+  loadMoreData();
+}
+
+/**
+ * Loads more comments and adds it to the page
+ * @param {string} paginationToken
+ */
+function loadMoreData(paginationToken = null) {
+  let url='/data';
+  if (paginationToken) {
+    url += '?paginationToken=' + paginationToken;
+  }
+  fetch(url).then((response) => response.json()).then((obj) => {
+    const commentsArr = obj.comments;
     const commentsContainer = document.getElementById('comments-container');
-    commentsContainer.innerHTML = '';
+
     commentsArr.forEach((comment) => {
       const commentDiv = document.createElement('div');
       commentDiv.className = 'comment-row';
@@ -55,6 +68,17 @@ function loadData() {
       commentDiv.appendChild(deleteBtnDiv);
       commentsContainer.appendChild(commentDiv);
     });
+
+    if (commentsArr.length > 0) {
+      const paginationToken = obj.paginationToken;
+      const loadMoreBtn = document.createElement('button');
+      loadMoreBtn.onclick = () => {
+        loadMoreBtn.remove();
+        loadMoreData(paginationToken);
+      };
+      loadMoreBtn.innerText = 'Load More...';
+      commentsContainer.appendChild(loadMoreBtn);
+    }
   });
 }
 
@@ -65,5 +89,5 @@ function loadData() {
 function deleteComment(id) {
   const params = new URLSearchParams();
   params.append('id', id);
-  fetch('/delete-data', {method: 'POST', body: params}).then(loadData);
+  fetch('/delete-data', {method: 'POST', body: params});
 }
