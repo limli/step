@@ -39,7 +39,7 @@ function loadData() {
  * @param {string} paginationToken
  */
 function loadMoreData(paginationToken = null) {
-  let url='/data';
+  let url='/comments';
   if (paginationToken) {
     url += '?paginationToken=' + paginationToken;
   }
@@ -88,6 +88,5 @@ function loadMoreData(paginationToken = null) {
  */
 function deleteComment(id) {
   const params = new URLSearchParams();
-  params.append('id', id);
-  fetch('/delete-data', {method: 'POST', body: params});
+  fetch('/comments/' + id, {method: 'DELETE'});
 }
