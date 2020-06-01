@@ -12,26 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+let user = null;
+
 /**
- * Adds a random greeting to the page.
+ * Initialize data
  */
-function addRandomGreeting() {
-  const greetings =
-    ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
-
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+async function init() {
+  await checkUserAuthentication();
+  loadMoreData();
 }
 
 /**
- * Adds the first batch of comments to the page
+ * Checks if user is authenticated, and adds the contents of the top bar
  */
-function loadData() {
-  loadMoreData();
+async function checkUserAuthentication() {
+  const response = await fetch('/authenticate');
+  const obj = await response.json();
+  user = obj.user;
+  const loginUrl = obj.login_url;
+  const logoutUrl = obj.logout_url;
+
+  const leftBar = document.getElementById('left-bar');
+  const rightBar = document.getElementById('right-bar');
+
+  if (!user) {
+    rightBar.innerHTML = '<a href="' + loginUrl + '">Login</a>';
+  } else {
+    rightBar.innerHTML = '<a href="' + logoutUrl + '">Logout</a>';
+    leftBar.innerText = user.email;
+  }
 }
 
 /**
