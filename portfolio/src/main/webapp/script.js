@@ -87,6 +87,5 @@ function loadMoreData(paginationToken = null) {
  * @param {*} id
  */
 function deleteComment(id) {
-  const params = new URLSearchParams();
   fetch('/comments/' + id, {method: 'DELETE'});
 }
