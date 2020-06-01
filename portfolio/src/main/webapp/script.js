@@ -73,19 +73,21 @@ function loadMoreData(paginationToken = null) {
 
       const textDiv = document.createElement('div');
       textDiv.innerText = comment.email + ': ' + comment.comment;
-
-      const deleteBtnDiv = document.createElement('div');
-      deleteBtnDiv.className = 'alignright';
-      const deleteBtn = document.createElement('button');
-      deleteBtn.onclick = () => {
-        commentDiv.remove();
-        deleteComment(comment.id);
-      };
-      deleteBtn.innerText = 'Delete';
-      deleteBtnDiv.appendChild(deleteBtn);
-
       commentDiv.appendChild(textDiv);
-      commentDiv.appendChild(deleteBtnDiv);
+
+      if (user && user.email == comment.email) {
+        const deleteBtnDiv = document.createElement('div');
+        deleteBtnDiv.className = 'alignright';
+        const deleteBtn = document.createElement('button');
+        deleteBtn.onclick = () => {
+          commentDiv.remove();
+          deleteComment(comment.id);
+        };
+        deleteBtn.innerText = 'Delete';
+        deleteBtnDiv.appendChild(deleteBtn);
+        commentDiv.appendChild(deleteBtnDiv);
+      }
+
       commentsContainer.appendChild(commentDiv);
     });
 
