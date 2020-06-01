@@ -50,7 +50,6 @@ public class DataServlet extends HttpServlet {
   /** GET the comments as a json array. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<Comment> list = new ArrayList<>();
 
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery pq = datastore.prepare(query);
@@ -70,6 +69,7 @@ public class DataServlet extends HttpServlet {
       return;
     }
 
+    List<Comment> list = new ArrayList<>();
     for (Entity entity : results) {
       long id = entity.getKey().getId();
       String str = (String) entity.getProperty("comment");
