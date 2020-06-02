@@ -38,7 +38,7 @@ async function checkUserAuthentication() {
 
   if (!user) {
     rightBar.innerHTML = `<a href="${loginUrl}">Login</a>`;
-    addCommentDiv.innerHTML = `<a href="${loginUrl}">
+    addCommentDiv.innerHTML = `<a href="${loginUrl}">Login</a> to add a comment`;
         Login
       </a> to add a comment`;
   } else {
