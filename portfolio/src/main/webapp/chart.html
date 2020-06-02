@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Covid cases</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="chart-script.js"></script>
+</head>
+
+<body onload="init()">
+  <div class="content">
+    <div class="card">
+      <h2>Covid Cases</h2>
+      <div id="chart-container"></div>
+      <div id="date-label">
+        Date
+      </div>
+      <input type="range" min="1" max="100" value="50" class="slider" id="myRange" oninput="update()">
+    </div>
+  </div>
+</body>
+
+</html>
