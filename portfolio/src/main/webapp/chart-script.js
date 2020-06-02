@@ -43,8 +43,29 @@ function drawChart() {
   chart.draw(dataTable, options);
 }
 
+const throttle = (func, limit) => {
+  let lastFunc;
+  let lastRan;
+  return function(...args) {
+    if (!lastRan) {
+      func(...args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func(...args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+};
+
+const drawChartThrottle = throttle(drawChart, 100);
+
 /**
- * aa
+ * Slider range update
  */
 function update() {
   const dateLabel = document.getElementById('date-label');
@@ -52,7 +73,7 @@ function update() {
   dateLabel.innerText =
    date =
    dateToString(addDays(MIN_DATE, parseInt(range.value)));
-  drawChart();
+  drawChartThrottle();
 }
 
 /**
