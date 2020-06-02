@@ -34,10 +34,21 @@ async function checkUserAuthentication() {
 
   const leftBar = document.getElementById('left-bar');
   const rightBar = document.getElementById('right-bar');
+  const addCommentDiv = document.getElementById('add-comment');
 
   if (!user) {
-    rightBar.innerHTML = '<a href="' + loginUrl + '">Login</a>';
+    rightBar.innerHTML = `<a href="${loginUrl}">Login</a>`;
+    addCommentDiv.innerHTML = `<a href="${loginUrl}">Login</a> to add a comment`;
   } else {
+    addCommentDiv.innerHTML = `
+      <form action="/comments" method="POST">
+        <textarea
+          class="comment-textarea"
+          name="comment"
+          placeholder="Your Comment..."></textarea>
+        <br>
+        <input type="submit" value="Add a Comment"/>
+      </form>`;
     rightBar.innerHTML = '<a href="' + logoutUrl + '">Logout</a>';
     leftBar.innerText = user.email;
   }
@@ -61,7 +72,7 @@ function loadMoreData(paginationToken = null) {
       commentDiv.className = 'comment-row';
 
       const textDiv = document.createElement('div');
-      textDiv.innerText = comment.comment;
+      textDiv.innerText = comment.email + ': ' + comment.comment;
 
       const deleteBtnDiv = document.createElement('div');
       deleteBtnDiv.className = 'alignright';
