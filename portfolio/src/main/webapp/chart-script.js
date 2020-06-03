@@ -45,7 +45,13 @@ function drawChart() {
   chart.draw(dataTable, options);
 }
 
-const throttle = (func, limit) => {
+/**
+ * Throttles a function
+ * @param {function} func
+ * @param {number} limit
+ * @return {function}
+ */
+function throttle(func, limit) {
   let lastFunc;
   let lastRan;
   return function(...args) {
