@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private UserService userService;
+  private final UserService userService;
   private final DatastoreService datastore;
 
   static final int PAGE_SIZE = 5;

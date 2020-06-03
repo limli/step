@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/authenticate")
 public class AuthenticationServlet extends HttpServlet {
 
-  private UserService userService;
+  private final UserService userService;
 
   public AuthenticationServlet() {
     userService = UserServiceFactory.getUserService();

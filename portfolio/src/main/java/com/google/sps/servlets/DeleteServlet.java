@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteServlet extends HttpServlet {
 
   private final DatastoreService datastore;
-  private UserService userService;
+  private final UserService userService;
 
   public DeleteServlet() {
     datastore = DatastoreServiceFactory.getDatastoreService();
