@@ -39,10 +39,7 @@ public class CovidDataServlet extends HttpServlet {
     scanner.close();
   }
 
-  /**
-   * Gets authentication information (login url, logout url, user). If user is not logged in, user
-   * will be null.
-   */
+  /** Gets the covid data of the countries specified in the query string */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String countriesParam = request.getParameter("countries");
