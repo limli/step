@@ -118,3 +118,32 @@ body {
   background: #0074D9;
   cursor: pointer;
 }
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-button {
+  border: 1px solid;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  border: solid 1px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  background-color: white;
+}
+
+.dropdown-item {
+  padding: 5px;
+}
+
+.dropdown-item:hover {
+  background-color: gray;
+}
