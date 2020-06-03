@@ -21,7 +21,7 @@ function init() {
       });
 }
 
-/** Fetches bigfoot sightings data and uses it to create a chart. */
+/** Redraws chart based on date selected. */
 function drawChart() {
   const dataTable = new google.visualization.DataTable();
   dataTable.addColumn('string', 'Country');
