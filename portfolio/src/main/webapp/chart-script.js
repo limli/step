@@ -4,18 +4,20 @@ google.charts.load('current', {'packages': ['corechart']});
 const MIN_DATE = new Date('1/22/20');
 
 let data = {};
-let date = '4/10/20';
+let date = '';
 
 /**
  * initializes data
  */
 function init() {
+  update();
   const countries = ['Singapore', 'China'];
   const countriesParam = countries.join();
   fetch('/covid-data?countries=' + countriesParam)
       .then((response) => response.json())
       .then((obj) => {
         data = obj;
+        drawChart();
       });
 }
 
