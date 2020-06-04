@@ -1,5 +1,4 @@
 google.charts.load('current', {'packages': ['corechart']});
-// google.charts.setOnLoadCallback(drawChart);
 
 const MIN_DATE = new Date(Date.UTC(2020, 0, 22)); // 22 Jan 2020
 
@@ -49,7 +48,7 @@ function drawChart() {
 /**
  * Throttles a function
  * @param {function} func
- * @param {number} limit
+ * @param {number} limit - The limit of the function in milliseconds
  * @return {function}
  */
 function throttle(func, limit) {
@@ -78,7 +77,7 @@ const drawChartThrottle = throttle(drawChart, 100);
  */
 function update() {
   const dateLabel = document.getElementById('date-label');
-  const range = document.getElementById('myRange');
+  const range = document.getElementById('dayRange');
 
   date = addDays(MIN_DATE, parseInt(range.value));
   dateLabel.innerText = date.toLocaleDateString();
