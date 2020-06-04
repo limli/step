@@ -1,10 +1,10 @@
 google.charts.load('current', {'packages': ['corechart']});
 // google.charts.setOnLoadCallback(drawChart);
 
-const MIN_DATE = new Date('1/22/20');
+const MIN_DATE = new Date(Date.UTC(2020, 0, 22)); // 22 Jan 2020
 
 let data = {};
-let date = '';
+let date;
 
 /**
  * initializes data
@@ -29,7 +29,8 @@ function drawChart() {
 
   for (const country in data) {
     if (data.hasOwnProperty(country)) {
-      dataTable.addRow([country, data[country][date]]);
+      const unixTime = date.getTime() / 1000;
+      dataTable.addRow([country, data[country][unixTime]]);
     }
   }
 
@@ -78,9 +79,10 @@ const drawChartThrottle = throttle(drawChart, 100);
 function update() {
   const dateLabel = document.getElementById('date-label');
   const range = document.getElementById('myRange');
-  dateLabel.innerText =
-   date =
-   dateToString(addDays(MIN_DATE, parseInt(range.value)));
+
+  date = addDays(MIN_DATE, parseInt(range.value));
+  dateLabel.innerText = date.toLocaleDateString();
+
   drawChartThrottle();
 }
 
@@ -94,15 +96,4 @@ function addDays(date, days) {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;
-}
-
-/**
- * Converts date to M/D/YY format
- * @param {Date} date
- * @return {String}
- */
-function dateToString(date) {
-  return (date.getMonth() + 1) + '/' +
-    date.getDate() + '/' +
-    date.getFullYear().toString().substr(-2);
 }
