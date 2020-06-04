@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CovidDataServlet extends HttpServlet {
 
   // Maps: Country -> (Date -> Confirmed)
-  private Map<String, Map<String, Integer>> covidCases = new HashMap<>();
+  private Map<String, Map<Long, Integer>> covidCases = new HashMap<>();
 
   @Override
   public void init() {
@@ -24,12 +24,12 @@ public class CovidDataServlet extends HttpServlet {
       String line = scanner.nextLine();
       String[] cells = line.split(",");
 
-      String date = cells[0];
+      long date = Long.valueOf(cells[0]);
       String country = cells[1];
       Integer confirmedCases = Integer.valueOf(cells[2]);
 
       covidCases.putIfAbsent(country, new HashMap<>());
-      Map<String, Integer> countryMap = covidCases.get(country);
+      Map<Long, Integer> countryMap = covidCases.get(country);
       countryMap.put(date, confirmedCases);
     }
     scanner.close();
@@ -43,7 +43,7 @@ public class CovidDataServlet extends HttpServlet {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    Map<String, Map<String, Integer>> map = new HashMap<>();
+    Map<String, Map<Long, Integer>> map = new HashMap<>();
     String[] countries = countriesParam.split(",");
     for (int i = 0; i < countries.length; i++) {
       String country = countries[i];
