@@ -26,15 +26,11 @@ public class CovidDataServlet extends HttpServlet {
 
       String date = cells[0];
       String country = cells[1];
-      Integer confirm = Integer.valueOf(cells[2]);
+      Integer confirmedCases = Integer.valueOf(cells[2]);
 
-      if (!covidCases.containsKey(country)) {
-        Map<String, Integer> map = new HashMap<>();
-        covidCases.put(country, map);
-      }
-
+      covidCases.putIfAbsent(country, new HashMap<>());
       Map<String, Integer> countryMap = covidCases.get(country);
-      countryMap.put(date, confirm);
+      countryMap.put(date, confirmedCases);
     }
     scanner.close();
   }
