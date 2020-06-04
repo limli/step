@@ -37,23 +37,24 @@ function initDropdown() {
 
   const checkboxes = document.createElement('div');
   checkboxes.className = 'dropdown-menu';
-  for (let i=0; i<dropdownValues.length; i++) {
+  for (let i = 0; i < dropdownValues.length; i++) {
     const value = dropdownValues[i];
 
     const row = document.createElement('div');
-    row.className = 'dropdown-item';
-    row.onclick = () => dropdownItemOnClick(i);
+    const label = document.createElement('label');
+    label.className = 'dropdown-item';
+    row.appendChild(label);
+    checkboxes.appendChild(row);
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    row.appendChild(checkbox);
+    checkbox.onclick = () => dropdownItemOnClick(i);
+    label.appendChild(checkbox);
     dropdownCheckboxElements.push(checkbox);
 
     const text = document.createElement('span');
     text.innerText = value;
-    row.appendChild(text);
-
-    checkboxes.appendChild(row);
+    label.appendChild(text);
   }
   checkboxes.style.display = 'none';
   dropdown.appendChild(checkboxes);
@@ -66,6 +67,7 @@ function initDropdown() {
       checkboxes.style.display = 'none';
     }
   };
+  dropdownUpdateUI();
 }
 
 /**
@@ -93,8 +95,8 @@ function dropdownUpdateUI() {
   }
 
   header.innerText = dropdownSelectedValues.length == 0 ?
-      'Select Countries' :
-      dropdownSelectedValues.join(', ');
+    'Select Countries' :
+    dropdownSelectedValues.join(', ');
 }
 
 /** Redraws chart based on date selected. */
