@@ -9,14 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * This servlet prints out the HTML for the homepage. You wouldn't do this in a real codebase, but
- * this is meant to demonstrate getting a Blobstore URL and using it in a form to allow a user to
- * upload a file.
- */
+/** Servlet that allows a user to get a URL to upload a file to Blobstore. */
 @WebServlet("/upload-image-url")
 public class BlobstoreUrlServlet extends HttpServlet {
 
+  /** GETs the url */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
