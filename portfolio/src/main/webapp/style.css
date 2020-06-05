@@ -118,3 +118,8 @@ body {
   background: #0074D9;
   cursor: pointer;
 }
+
+.gallery img {
+  height: auto;
+  width: 200px;
+}
