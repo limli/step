@@ -46,7 +46,8 @@ function drawChart() {
 }
 
 /**
- * Throttles a function
+ * Throttles a function. The function can be called at most once in limit
+ * milliseconds.
  * @param {function} func
  * @param {number} limit - The limit of the function in milliseconds
  * @return {function}
