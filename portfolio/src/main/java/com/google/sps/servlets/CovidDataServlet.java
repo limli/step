@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/covid-data")
 public class CovidDataServlet extends HttpServlet {
 
-  // Maps: Country -> (Date -> Confirmed)
+  // Maps: Country -> (Date Timestamp -> Confirmed Cases)
   private Map<String, Map<Long, Integer>> covidCases = new HashMap<>();
 
   @Override
@@ -24,13 +24,13 @@ public class CovidDataServlet extends HttpServlet {
       String line = scanner.nextLine();
       String[] cells = line.split(",");
 
-      long date = Long.valueOf(cells[0]);
+      long timestamp = Long.valueOf(cells[0]);
       String country = cells[1];
       Integer confirmedCases = Integer.valueOf(cells[2]);
 
       covidCases.putIfAbsent(country, new HashMap<>());
       Map<Long, Integer> countryMap = covidCases.get(country);
-      countryMap.put(date, confirmedCases);
+      countryMap.put(timestamp, confirmedCases);
     }
     scanner.close();
   }
