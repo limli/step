@@ -30,9 +30,7 @@ function initSelector() {
   const countrySelector = document.getElementById('country-selector');
 
   const checkboxes = document.createElement('ul');
-  for (let i = 0; i < checkboxValues.length; i++) {
-    const value = checkboxValues[i];
-
+  for (const value of checkboxValues) {
     const item = document.createElement('li');
     const label = document.createElement('label');
     item.appendChild(label);
