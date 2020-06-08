@@ -27,7 +27,6 @@ public class ImageServlet extends HttpServlet {
   /** GET the image URLs as an array. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     Query query = new Query("Image");
     PreparedQuery pq = datastore.prepare(query);
 
