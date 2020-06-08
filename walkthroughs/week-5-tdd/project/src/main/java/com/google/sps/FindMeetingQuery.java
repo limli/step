@@ -29,20 +29,20 @@ public final class FindMeetingQuery {
       }
     }
 
-    Collection<TimeRange> availablesTimeRanges = new ArrayList<>();
+    Collection<TimeRange> availableTimeRanges = new ArrayList<>();
 
     // consider the case where there is no unavailable time ranges separately to prevent out of
     // bounds call when trying to get the first element of the unavailableTimeRanges list
     if (unavailableTimeRanges.isEmpty()) {
-      addTimeRangeIfLongEnough(availablesTimeRanges, request, TimeRange.WHOLE_DAY);
-      return availablesTimeRanges;
+      addTimeRangeIfLongEnough(availableTimeRanges, request, TimeRange.WHOLE_DAY);
+      return availableTimeRanges;
     }
 
     unavailableTimeRanges = combineRanges(unavailableTimeRanges);
 
     // add the TimeRange right before the first unavailable slot
     addTimeRangeIfLongEnough(
-        availablesTimeRanges,
+        availableTimeRanges,
         request,
         TimeRange.fromStartEnd(
             TimeRange.START_OF_DAY, unavailableTimeRanges.get(0).start(), false));
@@ -52,32 +52,33 @@ public final class FindMeetingQuery {
       TimeRange previous = unavailableTimeRanges.get(i - 1);
       TimeRange current = unavailableTimeRanges.get(i);
       TimeRange range = TimeRange.fromStartEnd(previous.end(), current.start(), false);
-      addTimeRangeIfLongEnough(availablesTimeRanges, request, range);
+      addTimeRangeIfLongEnough(availableTimeRanges, request, range);
     }
 
     // add the TimeRange right after the last unavailable slot
     addTimeRangeIfLongEnough(
-        availablesTimeRanges,
+        availableTimeRanges,
         request,
         TimeRange.fromStartEnd(
             unavailableTimeRanges.get(unavailableTimeRanges.size() - 1).end(),
             TimeRange.END_OF_DAY,
             true));
-    return availablesTimeRanges;
+
+    return availableTimeRanges;
   }
 
   /**
    * If the range's duration is shorter than the requested duration, then don't do anything. Else,
    * add it to the collection of available time ranges.
    *
-   * @param availablesTimeRanges
+   * @param availableTimeRanges
    * @param request
    * @param range
    */
   private void addTimeRangeIfLongEnough(
-      Collection<TimeRange> availablesTimeRanges, MeetingRequest request, TimeRange range) {
+      Collection<TimeRange> availableTimeRanges, MeetingRequest request, TimeRange range) {
     if (range.duration() >= request.getDuration()) {
-      availablesTimeRanges.add(range);
+      availableTimeRanges.add(range);
     }
   }
 
@@ -87,24 +88,24 @@ public final class FindMeetingQuery {
    * @param ranges
    */
   private List<TimeRange> combineRanges(List<TimeRange> ranges) {
-    List<TimeRange> answer = new ArrayList<>();
+    List<TimeRange> combinedRanges = new ArrayList<>();
     if (ranges.isEmpty()) {
-      return answer;
+      return combinedRanges;
     }
     List<TimeRange> sortedRanges = new ArrayList<>(ranges);
     sortedRanges.sort(TimeRange.ORDER_BY_START);
-    TimeRange lastEvent = sortedRanges.get(0);
+    TimeRange previousEvent = sortedRanges.get(0);
     for (TimeRange range : sortedRanges) {
-      if (lastEvent.overlaps(range)) {
-        lastEvent =
+      if (previousEvent.overlaps(range)) {
+        previousEvent =
             TimeRange.fromStartEnd(
-                lastEvent.start(), Math.max(lastEvent.end(), range.end()), false);
+                previousEvent.start(), Math.max(previousEvent.end(), range.end()), false);
       } else {
-        answer.add(lastEvent);
-        lastEvent = range;
+        combinedRanges.add(previousEvent);
+        previousEvent = range;
       }
     }
-    answer.add(lastEvent);
-    return answer;
+    combinedRanges.add(previousEvent);
+    return combinedRanges;
   }
 }
