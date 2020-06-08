@@ -4,11 +4,14 @@ const MIN_DATE = new Date(Date.UTC(2020, 0, 22)); // 22 Jan 2020
 
 let data = {};
 let date;
+const checkboxValues = ['Singapore', 'China', 'Malaysia'];
+const checkboxElements = [];
 
 /**
  * initializes data
  */
 function init() {
+  initSelector();
   update();
   const countries = ['Singapore', 'China'];
   const countriesParam = countries.join();
@@ -18,6 +21,31 @@ function init() {
         data = obj;
         drawChart();
       });
+}
+
+/**
+ * Initializes country selector
+ */
+function initSelector() {
+  const countrySelector = document.getElementById('country-selector');
+
+  const checkboxes = document.createElement('ul');
+  for (const value of checkboxValues) {
+    const item = document.createElement('li');
+    const label = document.createElement('label');
+    item.appendChild(label);
+    checkboxes.appendChild(item);
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    label.appendChild(checkbox);
+    checkboxElements.push(checkbox);
+
+    const text = document.createElement('span');
+    text.innerText = value;
+    label.appendChild(text);
+  }
+  countrySelector.appendChild(checkboxes);
 }
 
 /** Redraws chart based on date selected. */
