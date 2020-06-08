@@ -2,9 +2,9 @@ google.charts.load('current', {'packages': ['corechart']});
 
 const MIN_DATE = new Date(Date.UTC(2020, 0, 22)); // 22 Jan 2020
 
-let data = {};
+let data = null;
 let date;
-const checkboxValues = ['Singapore', 'China', 'Malaysia'];
+const checkboxValues = ['Singapore', 'China', 'Malaysia', 'US', 'South Korea'];
 const checkboxElements = [];
 
 /**
@@ -13,8 +13,7 @@ const checkboxElements = [];
 function init() {
   initSelector();
   update();
-  const countries = ['Singapore', 'China'];
-  const countriesParam = countries.join();
+  const countriesParam = checkboxValues.join();
   fetch('/covid-data?countries=' + countriesParam)
       .then((response) => response.json())
       .then((obj) => {
@@ -38,6 +37,7 @@ function initSelector() {
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
+    checkbox.onclick = drawChart;
     label.appendChild(checkbox);
     checkboxElements.push(checkbox);
 
@@ -50,15 +50,20 @@ function initSelector() {
 
 /** Redraws chart based on date selected. */
 function drawChart() {
+  if (data == null) {
+    return;
+  }
   const dataTable = new google.visualization.DataTable();
   dataTable.addColumn('string', 'Country');
   dataTable.addColumn('number', 'Cases');
 
-  for (const country in data) {
-    if (data.hasOwnProperty(country)) {
-      const unixTime = date.getTime() / 1000;
-      dataTable.addRow([country, data[country][unixTime]]);
+  for (let i = 0; i < checkboxValues.length; i++) {
+    if (!checkboxElements[i].checked) {
+      continue;
     }
+    const country = checkboxValues[i];
+    const unixTime = date.getTime() / 1000;
+    dataTable.addRow([country, data[country][unixTime]]);
   }
 
   const options = {
@@ -66,6 +71,9 @@ function drawChart() {
     'width': 600,
     'height': 300,
     'legend': {position: 'none'},
+    'hAxis': {
+      'minValue': 0,
+    },
   };
 
   const chart = new google.visualization.BarChart(
