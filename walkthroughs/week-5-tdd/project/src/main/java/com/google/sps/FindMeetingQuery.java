@@ -20,6 +20,21 @@ import java.util.List;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    Collection<String> allAttendees = new ArrayList<>();
+    allAttendees.addAll(request.getAttendees());
+    allAttendees.addAll(request.getOptionalAttendees());
+    MeetingRequest requestAllMandatory = new MeetingRequest(allAttendees, request.getDuration());
+
+    Collection<TimeRange> timeRangesForOptional =
+        queryMandatoryAttendees(events, requestAllMandatory);
+    if (!timeRangesForOptional.isEmpty() || request.getAttendees().isEmpty()) {
+      return timeRangesForOptional;
+    }
+    return queryMandatoryAttendees(events, request);
+  }
+
+  private Collection<TimeRange> queryMandatoryAttendees(
+      Collection<Event> events, MeetingRequest request) {
     List<TimeRange> unavailableTimeRanges = new ArrayList<>();
     for (Event event : events) {
       for (String atttendee : event.getAttendees()) {
