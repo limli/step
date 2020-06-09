@@ -33,6 +33,13 @@ public final class FindMeetingQuery {
     return queryMandatoryAttendees(events, request);
   }
 
+  /**
+   * Ignores optional attendees when finding time slots
+   *
+   * @param events
+   * @param request
+   * @return
+   */
   private Collection<TimeRange> queryMandatoryAttendees(
       Collection<Event> events, MeetingRequest request) {
     List<TimeRange> unavailableTimeRanges = new ArrayList<>();
