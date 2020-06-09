@@ -5,7 +5,7 @@ const MIN_DATE = new Date(Date.UTC(2020, 0, 22)); // 22 Jan 2020
 let data = null;
 let date;
 const checkboxValues = ['Singapore', 'China', 'Malaysia', 'US', 'South Korea'];
-const checkboxElements = [];
+let checkboxElements = [];
 
 /**
  * initializes data
@@ -28,24 +28,25 @@ function init() {
 function initSelector() {
   const countrySelector = document.getElementById('country-selector');
 
-  const checkboxes = document.createElement('ul');
-  for (const value of checkboxValues) {
-    const item = document.createElement('li');
-    const label = document.createElement('label');
-    item.appendChild(label);
-    checkboxes.appendChild(item);
+  const checkboxListHTML = `
+    <ul>
+      ${checkboxValues.map((value) => `
+          <li>
+            <label>
+              <input class="country-checkbox"
+                  type="checkbox"
+                  onclick="drawChart()"
+              >
+              <span> ${value} </span>
+            </label>
+          </li>
+        `).join('')}
+    </ul>`;
 
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.onclick = drawChart;
-    label.appendChild(checkbox);
-    checkboxElements.push(checkbox);
-
-    const text = document.createElement('span');
-    text.innerText = value;
-    label.appendChild(text);
-  }
-  countrySelector.appendChild(checkboxes);
+  countrySelector.innerHTML = checkboxListHTML;
+  checkboxElements = Array.from(
+      countrySelector.getElementsByClassName('country-checkbox'),
+  );
 }
 
 /** Redraws chart based on date selected. */
