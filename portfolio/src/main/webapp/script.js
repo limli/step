@@ -38,16 +38,19 @@ async function checkUserAuthentication() {
 
   if (!user) {
     rightBar.innerHTML = `<a href="${loginUrl}">Login</a>`;
-    addCommentDiv.innerHTML = `<a href="${loginUrl}">Login</a> to add a comment`;
+    addCommentDiv.innerHTML = `<a href="${loginUrl}">
+        Login
+      </a> to add a comment`;
   } else {
     addCommentDiv.innerHTML = `
       <form action="/comments" method="POST">
-        <textarea
-          class="comment-textarea"
-          name="comment"
-          placeholder="Your Comment..."></textarea>
-        <br>
-        <input type="submit" value="Add a Comment"/>
+        <div class="form-group">
+          <textarea
+            class="form-control"
+            name="comment"
+            placeholder="Your Comment..."></textarea>
+        </div>
+        <input class="btn btn-primary " type="submit" value="Add a Comment"/>
       </form>`;
     rightBar.innerHTML = '<a href="' + logoutUrl + '">Logout</a>';
     leftBar.innerText = user.email;
@@ -59,41 +62,41 @@ async function checkUserAuthentication() {
  * @param {string} paginationToken
  */
 function loadMoreData(paginationToken = null) {
-  let url='/comments';
+  let url = '/comments';
   if (paginationToken) {
     url += '?paginationToken=' + paginationToken;
   }
   fetch(url).then((response) => response.json()).then((obj) => {
     const commentsArr = obj.comments;
     const commentsContainer = document.getElementById('comments-container');
+    const tbody = commentsContainer.querySelector('tbody');
 
     commentsArr.forEach((comment) => {
-      const commentDiv = document.createElement('div');
-      commentDiv.className = 'comment-row';
+      const commentRow = document.createElement('tr');
+      tbody.appendChild(commentRow);
+      const commentCell = document.createElement('td');
+      commentRow.appendChild(commentCell);
 
       const textDiv = document.createElement('div');
       textDiv.innerText = comment.email + ': ' + comment.comment;
-      commentDiv.appendChild(textDiv);
+      commentCell.appendChild(textDiv);
 
       if (user && user.email == comment.email) {
-        const deleteBtnDiv = document.createElement('div');
-        deleteBtnDiv.className = 'alignright';
         const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-danger btn-sm float-right';
         deleteBtn.onclick = () => {
-          commentDiv.remove();
+          commentRow.remove();
           deleteComment(comment.id);
         };
-        deleteBtn.innerText = 'Delete';
-        deleteBtnDiv.appendChild(deleteBtn);
-        commentDiv.appendChild(deleteBtnDiv);
+        deleteBtn.innerHTML = '<i class="fa fa-trash"></i>';
+        commentCell.appendChild(deleteBtn);
       }
-
-      commentsContainer.appendChild(commentDiv);
     });
 
     if (commentsArr.length > 0) {
       const paginationToken = obj.paginationToken;
       const loadMoreBtn = document.createElement('button');
+      loadMoreBtn.className = 'btn btn-secondary btn-block';
       loadMoreBtn.onclick = () => {
         loadMoreBtn.remove();
         loadMoreData(paginationToken);
