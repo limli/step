@@ -23,10 +23,6 @@ public final class FindMeetingQuery {
    * Finds suitable timeslot without clashes for all required attendees in the MeetingRequest. If it
    * is possible for all optional attendees to attend the meeting as well, then, finds slots where
    * both the required and optional attendees can attend.
-   *
-   * @param events
-   * @param request
-   * @return
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> allAttendees = new ArrayList<>();
