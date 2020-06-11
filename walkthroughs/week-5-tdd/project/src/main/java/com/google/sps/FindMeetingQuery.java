@@ -19,7 +19,28 @@ import java.util.Collection;
 import java.util.List;
 
 public final class FindMeetingQuery {
+  /**
+   * Finds suitable timeslot without clashes for all required attendees in the MeetingRequest. If it
+   * is possible for all optional attendees to attend the meeting as well, then, finds slots where
+   * both the required and optional attendees can attend.
+   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    Collection<String> allAttendees = new ArrayList<>();
+    allAttendees.addAll(request.getAttendees());
+    allAttendees.addAll(request.getOptionalAttendees());
+    MeetingRequest allMandatoryRequest = new MeetingRequest(allAttendees, request.getDuration());
+
+    Collection<TimeRange> timeRangesIncludingOptional =
+        queryMandatoryAttendees(events, allMandatoryRequest);
+    if (!timeRangesIncludingOptional.isEmpty() || request.getAttendees().isEmpty()) {
+      return timeRangesIncludingOptional;
+    }
+    return queryMandatoryAttendees(events, request);
+  }
+
+  /** Ignores optional attendees when finding time slots */
+  private Collection<TimeRange> queryMandatoryAttendees(
+      Collection<Event> events, MeetingRequest request) {
     List<TimeRange> unavailableTimeRanges = new ArrayList<>();
     for (Event event : events) {
       for (String atttendee : event.getAttendees()) {
