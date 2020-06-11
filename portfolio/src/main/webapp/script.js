@@ -32,16 +32,35 @@ async function checkUserAuthentication() {
   const loginUrl = obj.login_url;
   const logoutUrl = obj.logout_url;
 
-  const leftBar = document.getElementById('left-bar');
-  const rightBar = document.getElementById('right-bar');
+  const userBar = document.getElementById('user-bar');
   const addCommentDiv = document.getElementById('add-comment');
 
   if (!user) {
-    rightBar.innerHTML = `<a href="${loginUrl}">Login</a>`;
+    userBar.innerHTML = `
+      <ul class="navbar-nav">
+        <li>
+          <a class="nav-link" href="${loginUrl}">
+            <i class="fa fa-sign-in" aria-hidden="true"></i> Login
+          </a>
+        </li>
+      </ul>`;
     addCommentDiv.innerHTML = `<a href="${loginUrl}">
         Login
       </a> to add a comment`;
   } else {
+    userBar.innerHTML = `
+      <ul class="navbar-nav">
+        <li>
+          <span class="navbar-text pr-2">
+            <i class="fa fa-user" aria-hidden="true"></i> ${user.email}
+          </span>
+        </li>
+        <li>
+          <a class="nav-link" href="${logoutUrl}">
+            <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+          </a>
+        </li>
+      </ul>`;
     addCommentDiv.innerHTML = `
       <form action="/comments" method="POST">
         <div class="form-group">
@@ -52,8 +71,6 @@ async function checkUserAuthentication() {
         </div>
         <input class="btn btn-primary " type="submit" value="Add a Comment"/>
       </form>`;
-    rightBar.innerHTML = '<a href="' + logoutUrl + '">Logout</a>';
-    leftBar.innerText = user.email;
   }
 }
 
@@ -93,7 +110,7 @@ function loadMoreData(paginationToken = null) {
       }
     });
 
-    if (commentsArr.length > 0) {
+    if (commentsArr.length == 5) {
       const paginationToken = obj.paginationToken;
       const loadMoreBtn = document.createElement('button');
       loadMoreBtn.className = 'btn btn-secondary btn-block';
