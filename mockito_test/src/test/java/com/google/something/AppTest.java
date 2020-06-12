@@ -1,4 +1,4 @@
-package com.google;
+package com.google.something;
 
 import static org.mockito.Mockito.*;
 
@@ -8,7 +8,7 @@ import org.junit.Test;
 
 /** Unit test for simple App. */
 public class AppTest {
-  /** Rigorous Test :-) */
+
   @Test
   public void shouldAnswerWithTrue() {
     // you can mock concrete classes, not only interfaces
