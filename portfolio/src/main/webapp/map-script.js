@@ -1,4 +1,3 @@
-
 /**
  * Initializes map
  */
