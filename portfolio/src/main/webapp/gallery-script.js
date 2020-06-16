@@ -12,7 +12,7 @@ function init() {
         form.style.display = 'block';
         form.action = imageUploadUrl;
       });
-  fetch('/images')
+  fetch('/imageUrls')
       .then((response) => response.json())
       .then((urlList) => {
         const gallery = document.getElementById('gallery');

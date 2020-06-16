@@ -15,12 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that handles images. */
-@WebServlet("/images")
-public class ImageServlet extends HttpServlet {
+@WebServlet("/imageUrls")
+public class ImageUrlsServlet extends HttpServlet {
 
   private final DatastoreService datastore;
 
-  public ImageServlet() {
+  public ImageUrlsServlet() {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
@@ -32,8 +32,8 @@ public class ImageServlet extends HttpServlet {
 
     List<String> urls = new ArrayList<>();
     for (Entity entity : pq.asIterable()) {
-      String url = (String) entity.getProperty("url");
-      urls.add(url);
+      String blobKey = (String) entity.getProperty("blobKey");
+      urls.add("/gallery-images/" + blobKey);
     }
 
     Gson gson = new Gson();
