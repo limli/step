@@ -10,10 +10,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
@@ -43,20 +40,20 @@ public class ImageHandlerServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the URL of the image that the user uploaded to Blobstore.
-    String imageUrl = getUploadedFileUrl(request, "image");
-    addImageUrlToDatastore(imageUrl);
+    String blobKey = getUploadedFileBlobkey(request, "image");
+    addBlobkeyToDatastore(blobKey);
 
     response.sendRedirect("/gallery.html");
   }
 
-  private void addImageUrlToDatastore(String url) {
+  private void addBlobkeyToDatastore(String blobKey) {
     Entity ImageEntity = new Entity("Image");
-    ImageEntity.setProperty("url", url);
+    ImageEntity.setProperty("blobKey", blobKey);
     datastore.put(ImageEntity);
   }
 
   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
-  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+  private String getUploadedFileBlobkey(HttpServletRequest request, String formInputElementName) {
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
 
@@ -79,17 +76,6 @@ public class ImageHandlerServlet extends HttpServlet {
     // file
     // https://stackoverflow.com/q/10779564/873165
 
-    // Use ImagesService to get a URL that points to the uploaded file.
-    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-
-    // To support running in Google Cloud Shell with AppEngine's dev server, we must use the
-    // relative path to the image, rather than the path returned by imagesService which contains a
-    // host.
-    try {
-      URL url = new URL(imagesService.getServingUrl(options));
-      return url.getPath();
-    } catch (MalformedURLException e) {
-      return imagesService.getServingUrl(options);
-    }
+    return blobKey.getKeyString();
   }
 }
