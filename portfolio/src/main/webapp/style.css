@@ -37,3 +37,7 @@ body {
   height: auto;
   width: 200px;
 }
+
+.cursor-pointer{
+  cursor: pointer;
+}
